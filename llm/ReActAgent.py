@@ -1,6 +1,6 @@
 import re
-from temp.LLMClient import HelloAgentsLLM
-from temp.ToolExecutor import ToolExecutor
+from .LLMClient import HelloAgentsLLM
+from .ToolExecutor import ToolExecutor
 from tools import get_attraction, get_weather
 
 # ReAct 提示词模板

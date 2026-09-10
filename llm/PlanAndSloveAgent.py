@@ -1,8 +1,8 @@
 
 
-from temp.Executor import Executor
+from .Executor import Executor
 
-from temp.Planner import Planner
+from .Planner import Planner
 
 
 class PlanAndSolveAgent:

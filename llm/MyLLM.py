@@ -1,7 +1,7 @@
 
 import os
 
-from temp.LLMClient import HelloAgentsLLM
+from .LLMClient import HelloAgentsLLM
 from dotenv import load_dotenv
 from openai import OpenAI
 from typing import Optional
