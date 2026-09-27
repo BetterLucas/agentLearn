@@ -7,7 +7,8 @@ from typing import List, Optional
 
 # When running this script directly, add project root to sys.path
 # Must be before any project-internal imports (tools, core, llm)
-# sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
 
 from tools.calculator_tool import CalculatorTool
 from core.agent import Agent

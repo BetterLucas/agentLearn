@@ -1,4 +1,5 @@
 import os
+import re
 from openai import OpenAI
 from dotenv import load_dotenv
 from typing import Iterable, List, Dict, Optional
@@ -9,7 +10,7 @@ load_dotenv()
 class HelloAgentsLLM:
     """
     为本书 "Hello Agents" 定制的LLM客户端。
-    它用于调用任何兼容OpenAI接口的服务，并默认使用流式响应。
+    它用于调用任何兼容OpenAI接口的服务，并默认使用流式响应, 实现其他agent可以在此类上进行拓展
     """
     def __init__(self, model: str = None, apiKey: str = None, baseUrl: str = None, timeout: int = None, temperature: float = 0.7):
         """
@@ -24,11 +25,12 @@ class HelloAgentsLLM:
         if not all([self.model, apiKey, baseUrl]):
             raise ValueError("模型ID、API密钥和服务地址必须被提供或在.env文件中定义。")
 
+        ## 创建OpenAI客户端实例
         self.client = OpenAI(api_key=apiKey, base_url=baseUrl, timeout=timeout)
 
     def think(self, messages: List[Dict[str, str]], temperature: Optional[float] = None) -> str:
         """
-        调用大语言模型进行思考，并返回其响应。
+        调用大语言模型进行思考，并返回其响应，流失响应
         """
         print(f"🧠 正在调用 {self.model} 模型...")
         try:
@@ -54,6 +56,23 @@ class HelloAgentsLLM:
         except Exception as e:
             print(f"❌ 调用LLM API时发生错误: {e}")
             return None
+    def invoke(self, messages: List[Dict[str, str]], **kwargs) -> str:
+        """
+        非流式调用LLM
+        """
+        try:
+            response = self.client.chat.completions.create(
+                model=self.model,
+                messages=messages,
+                temperature=kwargs.get("temperature", self.temperature),
+                stream=False,
+            )
+            return response.choices[0].message.content
+        except Exception as e:
+            print(f"❌ 调用LLM API时发生错误: {e}")
+            return None
+
+    
 
     def stream_invoke(self, messages: List[Dict[str, str]], **kwargs) -> Iterable[str]:
         """
